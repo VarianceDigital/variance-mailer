@@ -50,7 +50,7 @@ def send_test_email():
     sender_name = os.environ.get('SENDER_NAME')
 
     # recipient
-    recipient_email = "rinaldo.nani@gmail.com" # change to recipient email. Make sure to use a real email address in your tests to avoid hard bounces and protect your reputation as a sender.
+    recipient_email = "variance.milano@gmail.com" # change to recipient email. Make sure to use a real email address in your tests to avoid hard bounces and protect your reputation as a sender.
     recipient_name = ''
 
     # subject
@@ -169,7 +169,7 @@ def send_email(user_email, user_aut_key,email_link_url, email_link_token):
     # send the message.
     try:
         server = smtplib.SMTP(mailertogo_host, mailertogo_port)
-        #server.ehlo()
+        server.ehlo()
         server.starttls()
         server.ehlo()
         server.login(mailertogo_user, mailertogo_password)
