@@ -1,0 +1,1 @@
+web: gunicorn "variancemailer:create_app()"

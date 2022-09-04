@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block metatags %}
+<title>About | Variance Mailer</title>
+<meta name="description" content="Explain Variance Mailer.">
+{% endblock %}
+
+{% block contents %}
+<div class="container">
+    <div>
+        <ol class="breadcrumb small">
+            <li class="breadcrumb-item"><a href="{{url_for('bl_home.index')}}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">About</li>
+        </ol>
+    </div>
+
+    <h1>About this site</h1>
+    <p class="lead">This site is the presentation part of the Variance Mailer.</p>
+    <p>It is an API service implementing a minimalistic mechanism to send emails to users who signed-up 
+        with the CatLoader application.</p>
+    <p>It uses MailerToGo Heroku add-on. In order to use the code, one needs a valid MailerToGo subscription, 
+        along with MailerToGo authentication parameters.</p>
+    <p>Get the code on GitHub <a href="https://github.com/VarianceDigital/variance-mailer" target="_blank">here</a></p>
+    <p>Read full info on the related Medium article <a href="https://medium.com/@rinaldo.nani/send-emails-with-flask-mailertogo-4e58a7b8314f" target="_blank">here</a></p>
+    
+</div>
+{% endblock %}
