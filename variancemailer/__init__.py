@@ -17,9 +17,6 @@ def create_app():
     from . import bl_emails
     app.register_blueprint(bl_emails.bp)
 
-    from . import bl_modals
-    app.register_blueprint(bl_modals.bp)
-
     from . import auth
     app.register_blueprint(auth.bp)
 
