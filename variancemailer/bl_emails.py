@@ -50,11 +50,11 @@ def send_test_email():
     sender_name = os.environ.get('SENDER_NAME')
 
     # recipient
-    recipient_email = "variance.milano@gmail.com" # change to recipient email. Make sure to use a real email address in your tests to avoid hard bounces and protect your reputation as a sender.
+    recipient_email = "beethovenreview@gmail.com" # change to recipient email. Make sure to use a real email address in your tests to avoid hard bounces and protect your reputation as a sender.
     recipient_name = ''
 
     # subject
-    subject = 'Dobbiamo cambiare qualcosa'
+    subject = 'Dobbiamo cambiare qualcosa?'
 
     # text body
     body_plain = ("Ciao Rinaldo,\n"
