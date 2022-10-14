@@ -270,7 +270,7 @@ def testemail():
     return render_template('emails/emailsent.html', mc=mc, teststr=teststr)
 
 
-@bp.route('/sugnup/<incoming_token>')
+@bp.route('/signup/<incoming_token>')
 def signupEmailservice(incoming_token):
 
     error =0 
