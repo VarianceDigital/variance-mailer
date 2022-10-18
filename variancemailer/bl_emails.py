@@ -279,7 +279,7 @@ def send_reset_email(user_email, user_otp):
     recipient_name = 'CatLoader user'
 
     # subject
-    subject = 'Reset access key'
+    subject = 'Reset access key for CatLoader'
 
     # text body
     body_plain = ("Hi there,\n"
