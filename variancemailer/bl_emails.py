@@ -261,7 +261,7 @@ def send_change_email(user_email, user_aut_key,email_link_url, email_link_token)
     return 0, "Ok"
 
 
-def send_reset_email(user_email, user_otp,email_link_url, email_link_token):
+def send_reset_email(user_email, user_otp):
     mailertogo_host     = os.environ.get('MAILERTOGO_SMTP_HOST')
     mailertogo_port     = os.environ.get('MAILERTOGO_SMTP_PORT', 587)
     mailertogo_user     = os.environ.get('MAILERTOGO_SMTP_USER')
@@ -390,9 +390,10 @@ def resetkeyEmailservice(incoming_token):
     #RECEIVING OTP THIS TIME :)
     user_email, user_otp,  \
     email_link_url, email_link_token = get_data_from_token(incoming_token)
+    #No email link this time, the last two parameters are not used.
 
     if len(user_email)>0:
-        error, msg = send_reset_email(user_email, user_otp,email_link_url, email_link_token)
+        error, msg = send_reset_email(user_email, user_otp)
     else:
         error = 1
         msg = "Problem with token"
