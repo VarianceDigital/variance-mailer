@@ -8,31 +8,7 @@ import email.utils
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-bp = Blueprint('bl_emails', __name__, url_prefix='/emailservice')
-
-def get_data_from_token(token):
-    
-    jwt_secret = os.environ["JWT_MAILER_SECRET"]
-
-    #data that should be in token
-    user_email = ''
-    user_aut_key = ''
-    email_link_url = ''
-    email_link_token = ''
-
-    if token and len(token)>0:
-         
-        #TRY DECODE 
-        try:
-            decoded = jwt.decode(token, jwt_secret, algorithms=['HS256'])
-            user_email=decoded["user_email"]
-            user_aut_key=decoded["user_aut_key_or_otp"]
-            email_link_url=decoded["email_link_url"]
-            email_link_token=decoded["email_link_token"]
-        except jwt.DecodeError:
-            pass
-        
-    return user_email, user_aut_key, email_link_url, email_link_token
+bp = Blueprint('bl_emails_catloader', __name__, url_prefix='/emailservice-cat')
 
 
 def send_test_email():

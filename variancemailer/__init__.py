@@ -14,8 +14,11 @@ def create_app():
     from . import bl_home
     app.register_blueprint(bl_home.bp)
 
-    from . import bl_emails
-    app.register_blueprint(bl_emails.bp)
+    from . import bl_emails_catloader
+    app.register_blueprint(bl_emails_catloader.bp)
+
+    from . import bl_emails_minimaluser
+    app.register_blueprint(bl_emails_minimaluser.bp)
 
     from . import auth
     app.register_blueprint(auth.bp)
