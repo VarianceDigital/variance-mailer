@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template
 from .layoutUtils import *
 from .auth import *
-import jwt
 import os
 import smtplib
 import email.utils

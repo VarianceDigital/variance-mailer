@@ -5,6 +5,7 @@ from flask import (
 )
 
 import os
+import jwt
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
