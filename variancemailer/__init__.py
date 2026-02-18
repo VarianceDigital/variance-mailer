@@ -23,6 +23,9 @@ def create_app():
     from . import bl_emails_minimalblog
     app.register_blueprint(bl_emails_minimalblog.bp)
 
+    from . import bl_emails_nightsquirrel
+    app.register_blueprint(bl_emails_nightsquirrel.bp)
+
     from . import auth
     app.register_blueprint(auth.bp)
 
