@@ -8,7 +8,7 @@ import email.utils
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-bp = Blueprint('bl_emails_minimaluser', __name__, url_prefix='/emailservice-ntsqr')
+bp = Blueprint('bl_emails_nightsquirrel', __name__, url_prefix='/emailservice-ntsqr')
 
 
 def send_signup_email(user_email, user_aut_key,email_link_url, email_link_token):
