@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template                                                                                                          
-from .layoutUtils import *                                                                                                                          
-from .auth import *                                                                                                                                   
-import jwt                                                                                                                                            
+from flask import Blueprint
+from .layoutUtils import *
+from .auth import *
+import jwt
 import os
 import smtplib
 import email.utils
@@ -313,6 +313,40 @@ def send_payment_failed_email(data):
     return _send_email(recipient_email, "Admin", subject, body_plain, body_html)
 
 
+def send_payer_payment_failed_email(data):
+    recipient_email = data["user_email"]
+    payer_name = data.get("user_name", "there")
+    student_name = data.get("student_name", "A student")
+    qtn_title = data.get("qtn_title", "a question")
+    amount_cents = data.get("tkt_quote_cents", 0)
+    currency = data.get("tkt_currency", "EUR")
+    error_msg = data.get("error_msg", "unknown error")
+    amount = f"{amount_cents / 100:.2f}" if amount_cents else "0.00"
+
+    subject = "Payment failed - Night Squirrel"
+
+    body_plain = (
+        f"Hi {payer_name},\n\n"
+        f"The payment of {amount} {currency} for {student_name}'s question "
+        f"\"{qtn_title}\" could not be processed.\n\n"
+        f"Please reconnect your PayPal account and contact support if the "
+        f"issue persists.\n\n"
+        f"Enjoy!\n"
+    )
+
+    body_html = f'''<html><body>
+        <p>Hi {payer_name},</p>
+        <p>The payment of <b>{amount} {currency}</b> for
+        <b>{student_name}</b>'s question <b>"{qtn_title}"</b>
+        could not be processed.</p>
+        <p>Please reconnect your PayPal account and contact support
+        if the issue persists.</p>
+        <p>Enjoy!</p>
+    </body></html>'''
+
+    return _send_email(recipient_email, payer_name, subject, body_plain, body_html)
+
+
 # ── Notification endpoints ───────────────────────────────────────
 
 @bp.route('/answer_delivered/<incoming_token>')
@@ -340,6 +374,16 @@ def paymentFailedEmailservice(incoming_token):
     try:
         data = get_notification_data(incoming_token)
         error, msg = send_payment_failed_email(data)
+    except Exception as e:
+        error, msg = 1, str(e)
+    return {"error": error, "msg": msg}
+
+
+@bp.route('/payer_payment_failed/<incoming_token>')
+def payerPaymentFailedEmailservice(incoming_token):
+    try:
+        data = get_notification_data(incoming_token)
+        error, msg = send_payer_payment_failed_email(data)
     except Exception as e:
         error, msg = 1, str(e)
     return {"error": error, "msg": msg}
