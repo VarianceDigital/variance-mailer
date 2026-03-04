@@ -534,6 +534,31 @@ def send_quote_rejected_email(data):
 
     return _send_email(recipient_email, user_name, subject, body_plain, body_html)
 
+
+def send_student_ticket_closed_email(data):                                                                                                           
+    recipient_email = data["user_email"]                                                                                                              
+    user_name = data.get("user_name", "there")                                                                                                        
+    qtn_title = data.get("qtn_title", "your question")                                                                                                
+    tkt_id = data.get("tkt_id", "")                                                                                                                   
+                                                                                                                                                    
+    subject = f"Ticket #{tkt_id} closed - Night Squirrel"
+
+    body_plain = (
+        f"Hi {user_name},\n\n"
+        f"You have accepted the delivery for \"{qtn_title}\" "
+        f"(ticket #{tkt_id}). The ticket is now closed.\n\n"
+        f"Thank you for using Night Squirrel!\n"
+    )
+
+    body_html = f'''<html><body>
+        <p>Hi {user_name},</p>
+        <p>You have accepted the delivery for <b>"{qtn_title}"</b>
+        (ticket #{tkt_id}). The ticket is now closed.</p>
+        <p>Thank you for using Night Squirrel!</p>
+    </body></html>'''
+
+    return _send_email(recipient_email, user_name, subject, body_plain, body_html)
+
 # ── Notification endpoints ───────────────────────────────────────
 
 @bp.route('/answer_delivered/<incoming_token>')
@@ -615,6 +640,7 @@ def ticketClosedEmailservice(incoming_token):
         error, msg = 1, str(e)
     return {"error": error, "msg": msg}
 
+
 @bp.route('/question_deleted/<incoming_token>')
 def questionDeletedEmailservice(incoming_token):
     try:
@@ -623,6 +649,7 @@ def questionDeletedEmailservice(incoming_token):
     except Exception as e:
         error, msg = 1, str(e)
     return {"error": error, "msg": msg}
+
 
 @bp.route('/answer_ready/<incoming_token>')
 def answerReadyEmailservice(incoming_token):
@@ -639,6 +666,16 @@ def quoteRejectedEmailservice(incoming_token):
     try:
         data = get_notification_data(incoming_token)
         error, msg = send_quote_rejected_email(data)
+    except Exception as e:
+        error, msg = 1, str(e)
+    return {"error": error, "msg": msg}
+
+
+@bp.route('/student_ticket_closed/<incoming_token>')
+def studentTicketClosedEmailservice(incoming_token):
+    try:
+        data = get_notification_data(incoming_token)
+        error, msg = send_student_ticket_closed_email(data)
     except Exception as e:
         error, msg = 1, str(e)
     return {"error": error, "msg": msg}
