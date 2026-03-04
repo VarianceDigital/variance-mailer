@@ -479,6 +479,61 @@ def send_question_deleted_email(data):
 
     return _send_email(recipient_email, user_name, subject, body_plain, body_html)
 
+
+def send_answer_ready_email(data):                                                                                                                    
+    recipient_email = data["user_email"]                                                                                                              
+    user_name = data.get("user_name", "there")
+    qtn_title = data.get("qtn_title", "your question")
+    tkt_id = data.get("tkt_id", "")
+
+    subject = "Your answer is being prepared - Night Squirrel"
+
+    body_plain = (
+        f"Hi {user_name},\n\n"
+        f"The tutor has submitted the answer for your question \"{qtn_title}\" "
+        f"(ticket #{tkt_id}). Payment is being processed.\n\n"
+        f"You will receive another email once the answer is available to view.\n\n"
+        f"Enjoy!\n"
+    )
+
+    body_html = f'''<html><body>
+        <p>Hi {user_name},</p>
+        <p>The tutor has submitted the answer for your question
+        <b>"{qtn_title}"</b> (ticket #{tkt_id}).
+        Payment is being processed.</p>
+        <p>You will receive another email once the answer is available to view.</p>
+        <p>Enjoy!</p>
+    </body></html>'''
+
+    return _send_email(recipient_email, user_name, subject, body_plain, body_html)
+
+
+def send_quote_rejected_email(data):
+    recipient_email = data["user_email"]
+    user_name = data.get("user_name", "there")
+    qtn_title = data.get("qtn_title", "your question")
+    qtn_id = data.get("qtn_id", "")
+
+    subject = "Quote declined - Night Squirrel"
+
+    body_plain = (
+        f"Hi {user_name},\n\n"
+        f"You have declined the quote for your question \"{qtn_title}\" "
+        f"(#{qtn_id}).\n\n"
+        f"You can still edit the question and resubmit it for a new quote.\n\n"
+        f"Enjoy!\n"
+    )
+
+    body_html = f'''<html><body>
+        <p>Hi {user_name},</p>
+        <p>You have declined the quote for your question
+        <b>"{qtn_title}"</b> (#{qtn_id}).</p>
+        <p>You can still edit the question and resubmit it for a new quote.</p>
+        <p>Enjoy!</p>
+    </body></html>'''
+
+    return _send_email(recipient_email, user_name, subject, body_plain, body_html)
+
 # ── Notification endpoints ───────────────────────────────────────
 
 @bp.route('/answer_delivered/<incoming_token>')
@@ -565,6 +620,25 @@ def questionDeletedEmailservice(incoming_token):
     try:
         data = get_notification_data(incoming_token)
         error, msg = send_question_deleted_email(data)
+    except Exception as e:
+        error, msg = 1, str(e)
+    return {"error": error, "msg": msg}
+
+@bp.route('/answer_ready/<incoming_token>')
+def answerReadyEmailservice(incoming_token):
+    try:
+        data = get_notification_data(incoming_token)
+        error, msg = send_answer_ready_email(data)
+    except Exception as e:
+        error, msg = 1, str(e)
+    return {"error": error, "msg": msg}
+
+
+@bp.route('/quote_rejected/<incoming_token>')
+def quoteRejectedEmailservice(incoming_token):
+    try:
+        data = get_notification_data(incoming_token)
+        error, msg = send_quote_rejected_email(data)
     except Exception as e:
         error, msg = 1, str(e)
     return {"error": error, "msg": msg}
