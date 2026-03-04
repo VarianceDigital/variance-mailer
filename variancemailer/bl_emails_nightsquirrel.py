@@ -455,6 +455,29 @@ def send_ticket_closed_email(data):
 
     return _send_email(recipient_email, user_name, subject, body_plain, body_html)
 
+def send_question_deleted_email(data):                                                                                                                
+    recipient_email = data["user_email"]                                                                                                              
+    user_name = data.get("user_name", "there")
+    qtn_title = data.get("qtn_title", "a question")
+    tkt_id = data.get("tkt_id", "")
+
+    subject = f"Question deleted (ticket #{tkt_id}) - Night Squirrel"
+
+    body_plain = (
+        f"Hi {user_name},\n\n"
+        f"The student has deleted the question \"{qtn_title}\" "
+        f"(ticket #{tkt_id}). You are no longer assigned to this ticket.\n\n"
+        f"No further action is needed.\n"
+    )
+
+    body_html = f'''<html><body>
+        <p>Hi {user_name},</p>
+        <p>The student has deleted the question <b>"{qtn_title}"</b>
+        (ticket #{tkt_id}). You are no longer assigned to this ticket.</p>
+        <p>No further action is needed.</p>
+    </body></html>'''
+
+    return _send_email(recipient_email, user_name, subject, body_plain, body_html)
 
 # ── Notification endpoints ───────────────────────────────────────
 
@@ -533,6 +556,15 @@ def ticketClosedEmailservice(incoming_token):
     try:
         data = get_notification_data(incoming_token)
         error, msg = send_ticket_closed_email(data)
+    except Exception as e:
+        error, msg = 1, str(e)
+    return {"error": error, "msg": msg}
+
+@bp.route('/question_deleted/<incoming_token>')
+def questionDeletedEmailservice(incoming_token):
+    try:
+        data = get_notification_data(incoming_token)
+        error, msg = send_question_deleted_email(data)
     except Exception as e:
         error, msg = 1, str(e)
     return {"error": error, "msg": msg}
