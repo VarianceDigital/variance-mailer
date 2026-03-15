@@ -679,3 +679,46 @@ def studentTicketClosedEmailservice(incoming_token):
     except Exception as e:
         error, msg = 1, str(e)
     return {"error": error, "msg": msg}
+
+
+def send_needs_clarification_email(data):
+    recipient_email = data["user_email"]
+    user_name = data.get("user_name", "there")
+    qtn_title = data.get("qtn_title", "your question")
+    qtn_id = data.get("qtn_id", "")
+    student_hint = data.get("student_hint", "")
+
+    subject = "Your question needs a small fix - Night Squirrel"
+
+    hint_plain = f"\n{student_hint}\n" if student_hint else ""
+    hint_html = f"<p><b>Feedback:</b> {student_hint}</p>" if student_hint else ""
+
+    body_plain = (
+        f"Hi {user_name},\n\n"
+        f"We reviewed your question \"{qtn_title}\" (#{qtn_id}) "
+        f"and need a small clarification before we can quote it.\n"
+        f"{hint_plain}\n"
+        f"Log in to Night Squirrel to edit your question and resubmit it.\n\n"
+        f"Enjoy!\n"
+    )
+
+    body_html = f'''<html><body>
+        <p>Hi {user_name},</p>
+        <p>We reviewed your question <b>"{qtn_title}"</b> (#{qtn_id})
+        and need a small clarification before we can quote it.</p>
+        {hint_html}
+        <p>Log in to Night Squirrel to edit your question and resubmit it.</p>
+        <p>Enjoy!</p>
+    </body></html>'''
+
+    return _send_email(recipient_email, user_name, subject, body_plain, body_html)
+
+
+@bp.route('/needs_clarification/<incoming_token>')
+def needsClarificationEmailservice(incoming_token):
+    try:
+        data = get_notification_data(incoming_token)
+        error, msg = send_needs_clarification_email(data)
+    except Exception as e:
+        error, msg = 1, str(e)
+    return {"error": error, "msg": msg}
